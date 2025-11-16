@@ -127,7 +127,7 @@ jobs:
           exit 0
 
       - name: Fetch SonarQube PR analysis & Post Sonar summary as PR comment
-        if: ${{ github.event_name == 'pull_request' }}
+        if: ${{ github.event_name != 'push' }}
         env:
           BASE: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
