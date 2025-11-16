@@ -1,5 +1,10 @@
 name: Sonar Scan
 
+permissions:
+  pull-requests: write
+  contents: write
+  issues: write
+
 on:
   pull_request:
     types: [opened, synchronize, reopened, edited]
@@ -18,6 +23,7 @@ jobs:
       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
+      GITHUB_TOKEN: ${{ secrets.PR_REVIEWER_TOKEN }}
     steps:
       - name: Checkout repository (full history)
         uses: actions/checkout@v4
@@ -127,13 +133,13 @@ jobs:
           exit 0
 
       - name: Fetch SonarQube PR analysis & Post Sonar summary as PR comment
-        if: ${{ github.event_name != 'push' }}
+        if: ${{ github.event_name == 'pull_request' }}
         env:
           BASE: ${{ secrets.SONAR_HOST_URL }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
           SONAR_PROJECT_KEY: ${{ secrets.SONAR_PROJECT_KEY }}
           PR_NUMBER: ${{ github.event.pull_request.number }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PR_REVIEWER_TOKEN }}
         run: |
           set -euo pipefail
           BASE="${BASE%/}"
