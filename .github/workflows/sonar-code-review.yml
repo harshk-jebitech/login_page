@@ -29,10 +29,8 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
-          cache: 'npm'
-          cache-dependency-path: |
-            backend/package-lock.json
-            frontend/package-lock.json
+          # Cache disabled for monorepo setup - dependencies are installed in subdirectories
+          # cache: 'npm'
 
       - name: Install backend dependencies
         run: |
