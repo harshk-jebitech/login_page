@@ -25,13 +25,6 @@ jobs:
           fetch-depth: 0
           persist-credentials: true
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '18'
-          # Cache disabled for monorepo setup - dependencies are installed in subdirectories
-          # cache: 'npm'
-
       - name: Validate Sonar secrets (fail early)
         run: |
           if [ -z "${SONAR_HOST_URL}" ] || [ -z "${SONAR_TOKEN}" ] || [ -z "${SONAR_PROJECT_KEY}" ]; then
